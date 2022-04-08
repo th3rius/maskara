@@ -36,13 +36,6 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "gulp": "^3.7.0",
-    "gulp-coveralls": "^0.1.4",
-    "gulp-istanbul": "^0.9.0",
-    "gulp-istanbul-enforcer": "^1.0.3",
-    "gulp-jscs": "^3.0.2",
-    "gulp-load-plugins": "^0.10.0",
-    "gulp-mocha": "^2.0.1",
     "should": "^4.0.1",
     "gts": "^3.1.0",
     "typescript": "^4.0.3",
