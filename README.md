@@ -1,8 +1,7 @@
-#string-mask
-[![npm version](https://badge.fury.io/js/string-mask.svg)](http://badge.fury.io/js/string-mask)
-[![Bower version](https://badge.fury.io/bo/string-mask.svg)](http://badge.fury.io/bo/string-mask)
-[![Build Status](https://travis-ci.org/the-darc/string-mask.svg?branch=master)](https://travis-ci.org/the-darc/string-mask)
-[![Coverage Status](https://coveralls.io/repos/github/the-darc/string-mask/badge.svg?branch=master)](https://coveralls.io/github/the-darc/string-mask?branch=master)
+# maskara
+[![npm version](https://badge.fury.io/js/maskara.svg)](http://badge.fury.io/js/string-mask)
+[![Build Status](https://travis-ci.org/th3rius/maskara.svg?branch=master)](https://travis-ci.org/th3rius/maskara)
+[![Coverage Status](https://coveralls.io/repos/github/th3rius/maskara/badge.svg?branch=master)](https://coveralls.io/github/th3rius/maskara?branch=master)
 
 A string formatter and validator based on masks.
 
@@ -11,13 +10,13 @@ A string formatter and validator based on masks.
 **With npm:**
 
 ```javascript
-npm install --save string-mask
+npm install --save maskara
 ```
 
 **With bower:**
 
 ```javascript
-bower install --save string-mask
+bower install --save maskara
 ```
 
 ## SPECIAL MASK CHARACTERS
@@ -162,6 +161,6 @@ We'd love for you to contribute to our source code! We just ask to:
 
 ## LICENSE
 
-Copyright (c) 2016 Daniel Campos
+Copyright (c) 2022 Gabriel de Oliveira
 
 Licensed under the MIT license.
