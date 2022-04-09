@@ -1,11 +1,18 @@
-import * as should from 'should';
-import StringMask from './maskara';
+import StringMask, {StringMaskOptions} from './maskara';
+
+interface TestCase {
+  text: string;
+  pattern: string;
+  expected: string;
+  valid: boolean;
+  options?: StringMaskOptions;
+}
 
 describe('mask-formatter', () => {
-  function test(p: any) {
+  function test(p: TestCase) {
     const processed = StringMask.process(p.text, p.pattern, p.options);
-    processed.result.should.be.eql(p.expected);
-    processed.valid.should.be.eql(p.valid);
+    expect(processed.result).toBe(p.expected);
+    expect(processed.valid).toBe(p.valid);
   }
 
   describe('number:', () => {
@@ -70,7 +77,7 @@ describe('mask-formatter', () => {
   });
 
   describe('percentage:', () => {
-    const p = {
+    const p: TestCase = {
       text: '7612345678980',
       pattern: '#.##0,00 %',
       expected: '76.123.456.789,80 %',
@@ -108,7 +115,7 @@ describe('mask-formatter', () => {
   });
 
   describe('money:', () => {
-    const p = {
+    const p: TestCase = {
       text: '7612345678980',
       pattern: 'R$ #.##0,00',
       expected: 'R$ 76.123.456.789,80',
@@ -149,7 +156,7 @@ describe('mask-formatter', () => {
   });
 
   describe('CPF:', () => {
-    const p = {
+    const p: TestCase = {
       text: '12345678980',
       pattern: '000.000.000-00',
       expected: '123.456.789-80',
@@ -160,13 +167,11 @@ describe('mask-formatter', () => {
       done();
     });
     it("reverse '000.000.000-00' should format '12345678980' to '123.456.789-80'", done => {
-      // @ts-expect-error
       p.options = {reverse: true};
       test(p);
       done();
     });
     it("'000.000.000-00' should format '12345678a80' to '123.456.78'", done => {
-      // @ts-expect-error
       p.options = {reverse: false};
       p.text = '12345678a80';
       p.expected = '123.456.78';
@@ -177,7 +182,7 @@ describe('mask-formatter', () => {
   });
 
   describe('Date:', () => {
-    const p = {
+    const p: TestCase = {
       text: '23111987',
       pattern: '90/90/9900',
       expected: '23/11/1987',
@@ -199,12 +204,12 @@ describe('mask-formatter', () => {
     it("'+00 (00) 0000-0000' should format '553122222222' to '+55 (31) 2222-2222'", done => {
       const formatter = new StringMask('+00 (00) 0000-0000');
       const processed = formatter.process('553122222222');
-      processed.result.should.be.eql('+55 (31) 2222-2222');
-      processed.valid.should.be.eql(true);
+      expect(processed.result).toBe('+55 (31) 2222-2222');
+      expect(processed.valid).toBe(true);
       done();
     });
 
-    const p = {
+    const p: TestCase = {
       text: '553122222222',
       pattern: '+00 (00) 90000-0000',
       expected: '+55 (31) 2222-2222',
@@ -215,13 +220,11 @@ describe('mask-formatter', () => {
       done();
     });
     it("reverse '+00 (00) 90000-0000' should format '553122222222' to '+55 (31) 2222-2222'", done => {
-      // @ts-expect-error
       p.options = {reverse: true};
       test(p);
       done();
     });
     it("'+00 (00) 90000-0000' should format '5531622222222' to '+55 (31) 62222-2222'", done => {
-      // @ts-expect-error
       p.options = {reverse: false};
       p.text = '5531622222222';
       p.expected = '+55 (31) 62222-2222';
@@ -229,7 +232,6 @@ describe('mask-formatter', () => {
       done();
     });
     it("'+00 (00) 90000-0000' should format '5531622222222' to '+55 (31) 62222-2222'", done => {
-      // @ts-expect-error
       p.options = {reverse: true};
       test(p);
       done();
@@ -237,7 +239,7 @@ describe('mask-formatter', () => {
   });
 
   describe('RG:', () => {
-    const p = {
+    const p: TestCase = {
       text: 'mg11862459',
       pattern: 'SS 00.000.000',
       expected: 'mg 11.862.459',
@@ -248,7 +250,6 @@ describe('mask-formatter', () => {
       done();
     });
     it("reverse 'SS 00.000.000' should format 'mg11862459' to 'mg 11.862.459'", done => {
-      // @ts-expect-error
       p.options = {reverse: true};
       test(p);
       done();
@@ -337,64 +338,64 @@ describe('mask-formatter', () => {
 
   describe('Other usages:', () => {
     it('Should run validate', done => {
-      should(StringMask.validate('mg11862459', 'SS 00.000.000')).be.ok;
-      should(StringMask.validate('1011862459', 'SS 00.000.000')).be.not.ok;
+      expect(StringMask.validate('mg11862459', 'SS 00.000.000')).toBeTruthy();
+      expect(
+        StringMask.validate('1011862459', 'SS 00.000.000')
+      ).not.toBeTruthy();
       done();
     });
     it('Should apply mask', done => {
-      should(StringMask.apply('mg11862459', 'SS 00.000.000')).be.eql(
+      expect(StringMask.apply('mg11862459', 'SS 00.000.000')).toBe(
         'mg 11.862.459'
       );
       done();
     });
     it('Should not apply mask on empty values', done => {
-      should(StringMask.apply('', 'SS 00.000.000')).be.eql('');
-      should(StringMask.apply(null, 'SS 00.000.000')).be.eql('');
-      should(StringMask.apply(undefined, 'SS 00.000.000')).be.eql('');
+      expect(StringMask.apply('', 'SS 00.000.000')).toBe('');
+      expect(StringMask.apply(null, 'SS 00.000.000')).toBe('');
+      expect(StringMask.apply(undefined, 'SS 00.000.000')).toBe('');
       done();
     });
     it('should not escape in the recursive portion of pattern', done => {
-      should(StringMask.apply('123', 'YZ #.##0,00', {reverse: true})).be.eql(
+      expect(StringMask.apply('123', 'YZ #.##0,00', {reverse: true})).toBe(
         'YZ 1,23'
       );
-      should(StringMask.apply('123', 'YZ#.##0,00', {reverse: true})).be.eql(
+      expect(StringMask.apply('123', 'YZ#.##0,00', {reverse: true})).toBe(
         'YZ1,23'
       );
-      should(StringMask.apply('123', 'US #.##0,00', {reverse: true})).be.eql(
+      expect(StringMask.apply('123', 'US #.##0,00', {reverse: true})).toBe(
         'US 1,23'
       );
-      should(StringMask.apply('123', 'US.#.##0,00', {reverse: true})).be.eql(
+      expect(StringMask.apply('123', 'US.#.##0,00', {reverse: true})).toBe(
         'US.1,23'
       );
-      should(
+      expect(
         StringMask.apply('123456789', 'US #,##0.00', {reverse: true})
-      ).be.eql('US 1,234,567.89');
-      should(
+      ).toBe('US 1,234,567.89');
+      expect(
         StringMask.apply('123456789', '$U$S #,##0.00', {reverse: true})
-      ).be.eql('$U$S 1,234,567.89');
+      ).toBe('$U$S 1,234,567.89');
 
-      should(StringMask.apply('123', '00,# YZ')).be.eql('12,3 YZ');
-      should(StringMask.apply('123', '00,0##.# US')).be.eql('12,3 US');
-      should(StringMask.apply('123456789', '00,0##.# US')).be.eql(
+      expect(StringMask.apply('123', '00,# YZ')).toBe('12,3 YZ');
+      expect(StringMask.apply('123', '00,0##.# US')).toBe('12,3 US');
+      expect(StringMask.apply('123456789', '00,0##.# US')).toBe(
         '12,345.678.9 US'
       );
-      should(StringMask.apply('123456789', '00,0##.# $U$S')).be.eql(
+      expect(StringMask.apply('123456789', '00,0##.# $U$S')).toBe(
         '12,345.678.9 $U$S'
       );
 
-      should(StringMask.apply('123456789', '#L##0,00', {reverse: true})).be.eql(
+      expect(StringMask.apply('123456789', '#L##0,00', {reverse: true})).toBe(
         '1L234L567,89'
       );
       done();
     });
     it('should work with escaped tokens', done => {
-      should(StringMask.apply('125', '$##')).be.eql('#125');
-      should(StringMask.apply('125', '#$#', {reverse: true})).be.eql('125#');
-      should(StringMask.apply('JUSTTEST', 'AAAA $A AAAA')).be.eql(
-        'JUST A TEST'
-      );
+      expect(StringMask.apply('125', '$##')).toBe('#125');
+      expect(StringMask.apply('125', '#$#', {reverse: true})).toBe('125#');
+      expect(StringMask.apply('JUSTTEST', 'AAAA $A AAAA')).toBe('JUST A TEST');
 
-      should(StringMask.process('125a123', '$##')).be.eql({
+      expect(StringMask.process('125a123', '$##')).toStrictEqual({
         result: '#125',
         valid: false,
       });
