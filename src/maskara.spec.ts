@@ -1,8 +1,8 @@
-const should = require('should');
-const StringMask = require('../src/string-mask');
+import * as should from 'should';
+import StringMask from './maskara';
 
 describe('mask-formatter', () => {
-  function test(p) {
+  function test(p: any) {
     const processed = StringMask.process(p.text, p.pattern, p.options);
     processed.result.should.be.eql(p.expected);
     processed.valid.should.be.eql(p.valid);
@@ -160,11 +160,13 @@ describe('mask-formatter', () => {
       done();
     });
     it("reverse '000.000.000-00' should format '12345678980' to '123.456.789-80'", done => {
+      // @ts-expect-error
       p.options = {reverse: true};
       test(p);
       done();
     });
     it("'000.000.000-00' should format '12345678a80' to '123.456.78'", done => {
+      // @ts-expect-error
       p.options = {reverse: false};
       p.text = '12345678a80';
       p.expected = '123.456.78';
@@ -213,11 +215,13 @@ describe('mask-formatter', () => {
       done();
     });
     it("reverse '+00 (00) 90000-0000' should format '553122222222' to '+55 (31) 2222-2222'", done => {
+      // @ts-expect-error
       p.options = {reverse: true};
       test(p);
       done();
     });
     it("'+00 (00) 90000-0000' should format '5531622222222' to '+55 (31) 62222-2222'", done => {
+      // @ts-expect-error
       p.options = {reverse: false};
       p.text = '5531622222222';
       p.expected = '+55 (31) 62222-2222';
@@ -225,6 +229,7 @@ describe('mask-formatter', () => {
       done();
     });
     it("'+00 (00) 90000-0000' should format '5531622222222' to '+55 (31) 62222-2222'", done => {
+      // @ts-expect-error
       p.options = {reverse: true};
       test(p);
       done();
@@ -243,6 +248,7 @@ describe('mask-formatter', () => {
       done();
     });
     it("reverse 'SS 00.000.000' should format 'mg11862459' to 'mg 11.862.459'", done => {
+      // @ts-expect-error
       p.options = {reverse: true};
       test(p);
       done();

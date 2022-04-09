@@ -1,26 +1,26 @@
 {
-  "name": "string-mask",
+  "name": "maskara",
   "version": "0.3.0",
   "description": "A string formatter and validator based on masks",
-  "id": "/string-mask",
-  "main": "src/string-mask.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/the-darc/string-mask.git"
+    "url": "https://github.com/th3rius/maskara.git"
   },
   "bugs": {
-    "url": "https://github.com/the-darc/string-mask/issues"
+    "url": "https://github.com/th3rius/maskara/issues"
   },
   "scripts": {
-    "test": "gulp test-coverage",
-    "release": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "test": "jest",
+    "test:watch": "jest -w",
     "lint": "gts lint",
     "clean": "gts clean",
     "compile": "tsc",
     "fix": "gts fix",
     "prepare": "yarn run compile",
     "pretest": "yarn run compile",
-    "posttest": "yarn run lint"
+    "posttest": "yarn run lint",
+    "prerelease": "yarn run compile",
+    "release": "release-it"
   },
   "keywords": [
     "mask",
@@ -30,15 +30,20 @@
     "validation"
   ],
   "author": {
-    "name": "Daniel Campos",
-    "email": "darc.tec@gmail.com"
+    "name": "Gabriel de Oliveira",
+    "email": "gabrielhk3@gmail.com"
   },
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "jest": "^27.5.1"
+  },
   "devDependencies": {
-    "should": "^4.0.1",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^14.11.2",
     "gts": "^3.1.0",
-    "typescript": "^4.0.3",
-    "@types/node": "^14.11.2"
+    "should": "^13.2.3",
+    "ts-jest": "^27.1.4",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.0.3"
   }
 }
