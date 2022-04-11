@@ -1,16 +1,16 @@
-import StringMask, {StringMaskOptions} from './maskara';
+import Maskara, {MaskaraOptions} from './maskara';
 
 interface TestCase {
   text: string;
   pattern: string;
   expected: string;
   valid: boolean;
-  options?: StringMaskOptions;
+  options?: MaskaraOptions;
 }
 
 describe('mask-formatter', () => {
   function test(p: TestCase) {
-    const processed = StringMask.process(p.text, p.pattern, p.options);
+    const processed = Maskara.process(p.text, p.pattern, p.options);
     expect(processed.result).toBe(p.expected);
     expect(processed.valid).toBe(p.valid);
   }
@@ -202,7 +202,7 @@ describe('mask-formatter', () => {
 
   describe('phone:', () => {
     it("'+00 (00) 0000-0000' should format '553122222222' to '+55 (31) 2222-2222'", done => {
-      const formatter = new StringMask('+00 (00) 0000-0000');
+      const formatter = new Maskara('+00 (00) 0000-0000');
       const processed = formatter.process('553122222222');
       expect(processed.result).toBe('+55 (31) 2222-2222');
       expect(processed.valid).toBe(true);
@@ -338,64 +338,64 @@ describe('mask-formatter', () => {
 
   describe('Other usages:', () => {
     it('Should run validate', done => {
-      expect(StringMask.validate('mg11862459', 'SS 00.000.000')).toBeTruthy();
+      expect(Maskara.validate('mg11862459', 'SS 00.000.000')).toBeTruthy();
       expect(
-        StringMask.validate('1011862459', 'SS 00.000.000')
+        Maskara.validate('1011862459', 'SS 00.000.000')
       ).not.toBeTruthy();
       done();
     });
     it('Should apply mask', done => {
-      expect(StringMask.apply('mg11862459', 'SS 00.000.000')).toBe(
+      expect(Maskara.apply('mg11862459', 'SS 00.000.000')).toBe(
         'mg 11.862.459'
       );
       done();
     });
     it('Should not apply mask on empty values', done => {
-      expect(StringMask.apply('', 'SS 00.000.000')).toBe('');
-      expect(StringMask.apply(null, 'SS 00.000.000')).toBe('');
-      expect(StringMask.apply(undefined, 'SS 00.000.000')).toBe('');
+      expect(Maskara.apply('', 'SS 00.000.000')).toBe('');
+      expect(Maskara.apply(null, 'SS 00.000.000')).toBe('');
+      expect(Maskara.apply(undefined, 'SS 00.000.000')).toBe('');
       done();
     });
     it('should not escape in the recursive portion of pattern', done => {
-      expect(StringMask.apply('123', 'YZ #.##0,00', {reverse: true})).toBe(
+      expect(Maskara.apply('123', 'YZ #.##0,00', {reverse: true})).toBe(
         'YZ 1,23'
       );
-      expect(StringMask.apply('123', 'YZ#.##0,00', {reverse: true})).toBe(
+      expect(Maskara.apply('123', 'YZ#.##0,00', {reverse: true})).toBe(
         'YZ1,23'
       );
-      expect(StringMask.apply('123', 'US #.##0,00', {reverse: true})).toBe(
+      expect(Maskara.apply('123', 'US #.##0,00', {reverse: true})).toBe(
         'US 1,23'
       );
-      expect(StringMask.apply('123', 'US.#.##0,00', {reverse: true})).toBe(
+      expect(Maskara.apply('123', 'US.#.##0,00', {reverse: true})).toBe(
         'US.1,23'
       );
       expect(
-        StringMask.apply('123456789', 'US #,##0.00', {reverse: true})
+        Maskara.apply('123456789', 'US #,##0.00', {reverse: true})
       ).toBe('US 1,234,567.89');
       expect(
-        StringMask.apply('123456789', '$U$S #,##0.00', {reverse: true})
+        Maskara.apply('123456789', '$U$S #,##0.00', {reverse: true})
       ).toBe('$U$S 1,234,567.89');
 
-      expect(StringMask.apply('123', '00,# YZ')).toBe('12,3 YZ');
-      expect(StringMask.apply('123', '00,0##.# US')).toBe('12,3 US');
-      expect(StringMask.apply('123456789', '00,0##.# US')).toBe(
+      expect(Maskara.apply('123', '00,# YZ')).toBe('12,3 YZ');
+      expect(Maskara.apply('123', '00,0##.# US')).toBe('12,3 US');
+      expect(Maskara.apply('123456789', '00,0##.# US')).toBe(
         '12,345.678.9 US'
       );
-      expect(StringMask.apply('123456789', '00,0##.# $U$S')).toBe(
+      expect(Maskara.apply('123456789', '00,0##.# $U$S')).toBe(
         '12,345.678.9 $U$S'
       );
 
-      expect(StringMask.apply('123456789', '#L##0,00', {reverse: true})).toBe(
+      expect(Maskara.apply('123456789', '#L##0,00', {reverse: true})).toBe(
         '1L234L567,89'
       );
       done();
     });
     it('should work with escaped tokens', done => {
-      expect(StringMask.apply('125', '$##')).toBe('#125');
-      expect(StringMask.apply('125', '#$#', {reverse: true})).toBe('125#');
-      expect(StringMask.apply('JUSTTEST', 'AAAA $A AAAA')).toBe('JUST A TEST');
+      expect(Maskara.apply('125', '$##')).toBe('#125');
+      expect(Maskara.apply('125', '#$#', {reverse: true})).toBe('125#');
+      expect(Maskara.apply('JUSTTEST', 'AAAA $A AAAA')).toBe('JUST A TEST');
 
-      expect(StringMask.process('125a123', '$##')).toStrictEqual({
+      expect(Maskara.process('125a123', '$##')).toStrictEqual({
         result: '#125',
         valid: false,
       });

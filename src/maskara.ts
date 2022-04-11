@@ -49,7 +49,7 @@ function calcOptionalNumbersToUse(pattern: string, value: string) {
 function concatChar(
   text: string,
   character: string,
-  options: StringMaskOptions,
+  options: MaskaraOptions,
   token?: Token
 ) {
   if (token && typeof token.transform === 'function') {
@@ -91,18 +91,18 @@ function insertChar(text: string, char: string, position: number) {
   return t.join('');
 }
 
-export interface StringMaskOptions {
+export interface MaskaraOptions {
   reverse?: boolean;
   useDefaults?: boolean;
 }
 
 export type ProcessableValue = string | null | undefined;
 
-class StringMask {
-  options: StringMaskOptions;
+class Maskara {
+  options: MaskaraOptions;
   pattern: string;
 
-  constructor(pattern: string, opt?: StringMaskOptions) {
+  constructor(pattern: string, opt?: MaskaraOptions) {
     this.options = opt || {};
     this.options = {
       reverse: this.options.reverse || false,
@@ -132,7 +132,7 @@ class StringMask {
       inc: this.options.reverse ? -1 : 1,
     };
 
-    function continueCondition(options: StringMaskOptions) {
+    function continueCondition(options: MaskaraOptions) {
       if (
         !inRecursiveMode &&
         !recursive.length &&
@@ -284,26 +284,26 @@ class StringMask {
   static process(
     value: ProcessableValue,
     pattern: string,
-    options?: StringMaskOptions
+    options?: MaskaraOptions
   ) {
-    return new StringMask(pattern, options).process(value);
+    return new Maskara(pattern, options).process(value);
   }
 
   static apply(
     value: ProcessableValue,
     pattern: string,
-    options?: StringMaskOptions
+    options?: MaskaraOptions
   ) {
-    return new StringMask(pattern, options).apply(value);
+    return new Maskara(pattern, options).apply(value);
   }
 
   static validate(
     value: ProcessableValue,
     pattern: string,
-    options?: StringMaskOptions
+    options?: MaskaraOptions
   ) {
-    return new StringMask(pattern, options).validate(value);
+    return new Maskara(pattern, options).validate(value);
   }
 }
 
-export default StringMask;
+export default Maskara;
